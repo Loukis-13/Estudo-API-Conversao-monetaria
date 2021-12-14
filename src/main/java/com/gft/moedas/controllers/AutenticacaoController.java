@@ -6,11 +6,12 @@ import com.gft.moedas.entities.Usuario;
 import com.gft.moedas.exception.AlreadyExistentUserException;
 import com.gft.moedas.services.AutenticacaoService;
 import com.gft.moedas.services.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("auth")
+@Tag(name = "Auth", description = "autenticação de usuário")
 public class AutenticacaoController {
     @Autowired
     AutenticacaoService autenticacaoService;
@@ -29,6 +31,7 @@ public class AutenticacaoController {
     private static final BCryptPasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     @PostMapping
+    @Operation(summary = "Autenticar usuário")
     public ResponseEntity<TokenDTO> autenticar(@RequestBody AutenticacaoDTO authform) {
         try {
             return ResponseEntity.ok(autenticacaoService.autenticar(authform));
@@ -39,6 +42,7 @@ public class AutenticacaoController {
     }
 
     @PostMapping("criar")
+    @Operation(summary = "Criar novo usuário")
     public ResponseEntity<TokenDTO> criarConta(@RequestBody AutenticacaoDTO authform) {
         Usuario usuario = usuarioService.buscarUsuarioPorNome(authform.getUsername());
 

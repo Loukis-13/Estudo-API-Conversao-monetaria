@@ -7,6 +7,9 @@ import com.gft.moedas.DTO.usuario.ConsultaUsuarioDTO;
 import com.gft.moedas.entities.Troca;
 import com.gft.moedas.entities.Usuario;
 import com.gft.moedas.services.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,6 +23,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("troca")
+@Tag(name = "Troca", description = "trocas entre moedas")
+@SecurityRequirement(name = "bearerAuth")
 public class TrocaController {
     @Autowired
     UsuarioService usuarioService;
@@ -34,6 +39,7 @@ public class TrocaController {
     }
 
     @GetMapping
+    @Operation(summary = "Ver valores de todas as moedas disponíveis para troca, com base no Real")
     public ResponseEntity valorMoedas() {
         try {
             if ((new Date().getTime() - 86400000) > tempoMoedas.getTime()) {
@@ -49,6 +55,7 @@ public class TrocaController {
     }
 
     @PostMapping
+    @Operation(summary = "Troca entre duas moedas")
     public ResponseEntity TrocarMoedas(@RequestBody FazerTrocaDTO dto, Authentication authentication) {
         try {
             if ((new Date().getTime() - 86400000) > tempoMoedas.getTime()) {
@@ -77,6 +84,7 @@ public class TrocaController {
     }
 
     @DeleteMapping
+    @Operation(summary = "Apagar um registro de troca pela data em foi feita")
     public ResponseEntity apagarTroca(@RequestBody DataTrocaDTO data, Authentication authentication) {
         Usuario usuario = usuarioService.buscarUsuarioPorNome(authentication.getName());
 
