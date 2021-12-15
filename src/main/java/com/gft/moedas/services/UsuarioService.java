@@ -37,4 +37,8 @@ public class UsuarioService implements UserDetailsService {
     public Usuario salvarUsuario(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
+
+    public void excluirUsuario(Usuario usuario) {
+        usuarioRepository.delete(usuario);
+    }
 }
