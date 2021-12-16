@@ -1,18 +1,20 @@
 package com.gft.moedas.exception;
 
+import java.util.List;
+
 public class MoedasException extends RuntimeException {
-	private String message;
+	private List<String> menssagem;
 
-	public MoedasException(String message) {
-		super(message);
-		this.message = message;
+	public MoedasException(List<String> menssagem) {
+		super(menssagem.toString());
+		this.menssagem = menssagem;
 	}
 
-	public String getMessage() {
-		return message;
+	public List<String> getMenssagem() {
+		return menssagem;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setMenssagem(List<String> menssagem) {
+		this.menssagem = menssagem;
 	}
 }

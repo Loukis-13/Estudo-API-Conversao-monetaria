@@ -1,5 +1,6 @@
 package com.gft.moedas.exception;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gft.moedas.DTO.ApiErrorDTO;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<ApiErrorDTO> handleLojaException(MoedasException ex, WebRequest request){
 		String error = "Erro no sistema";
 		
-		ApiErrorDTO apiError = new ApiErrorDTO(ex.getMessage(), error, HttpStatus.INTERNAL_SERVER_ERROR);
+		ApiErrorDTO apiError = new ApiErrorDTO(error, ex.getMenssagem(), HttpStatus.INTERNAL_SERVER_ERROR);
 		
 		return new ResponseEntity<ApiErrorDTO>(apiError, new HttpHeaders(), apiError.getStatus());
 	}
@@ -26,7 +27,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<ApiErrorDTO> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request){
 		String error = "Recurso não encontrado";
 		
-		ApiErrorDTO apiError = new ApiErrorDTO(ex.getMessage(), error, HttpStatus.NOT_FOUND);
+		ApiErrorDTO apiError = new ApiErrorDTO(error, ex.getMenssagem(), HttpStatus.NOT_FOUND);
 		
 		return new ResponseEntity<ApiErrorDTO>(apiError, new HttpHeaders(), apiError.getStatus());
 	}
@@ -35,7 +36,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<ApiErrorDTO> handleAlreadyExistentUserException(AlreadyExistentUserException ex, WebRequest request){
 		String error = "Nome de usuário já em uso";
 
-		ApiErrorDTO apiError = new ApiErrorDTO(ex.getMessage(), error, HttpStatus.BAD_REQUEST);
+		ApiErrorDTO apiError = new ApiErrorDTO(error, ex.getMenssagem(), HttpStatus.BAD_REQUEST);
 
 		return new ResponseEntity<ApiErrorDTO>(apiError, new HttpHeaders(), apiError.getStatus());
 	}
@@ -44,7 +45,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<ApiErrorDTO> handleUsernameNotFoundException(UsernameNotFoundException ex, WebRequest request){
 		String error = "Usuário não encontrado";
 
-		ApiErrorDTO apiError = new ApiErrorDTO(ex.getMessage(), error, HttpStatus.BAD_REQUEST);
+		ApiErrorDTO apiError = new ApiErrorDTO(error, ex.getMessage(), HttpStatus.BAD_REQUEST);
 
 		return new ResponseEntity<ApiErrorDTO>(apiError, new HttpHeaders(), apiError.getStatus());
 	}
@@ -53,7 +54,25 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<ApiErrorDTO> handleInternalAuthenticationServiceException(InternalAuthenticationServiceException ex, WebRequest request){
 		String error = "Nome ou senha incorretos";
 
-		ApiErrorDTO apiError = new ApiErrorDTO(ex.getMessage(), error, HttpStatus.BAD_REQUEST);
+		ApiErrorDTO apiError = new ApiErrorDTO(error, ex.getMessage(), HttpStatus.BAD_REQUEST);
+
+		return new ResponseEntity<ApiErrorDTO>(apiError, new HttpHeaders(), apiError.getStatus());
+	}
+
+	@ExceptionHandler( { TrocaInvalidaException.class } )
+	public ResponseEntity<ApiErrorDTO> handleTrocaInvalidaException(TrocaInvalidaException ex, WebRequest request){
+		String error = "Troca invalida";
+
+		ApiErrorDTO apiError = new ApiErrorDTO(error, ex.getMenssagem(), HttpStatus.BAD_REQUEST);
+
+		return new ResponseEntity<ApiErrorDTO>(apiError, new HttpHeaders(), apiError.getStatus());
+	}
+
+	@ExceptionHandler( { JsonProcessingException.class } )
+	public ResponseEntity<ApiErrorDTO> handleJsonProcessingException(JsonProcessingException ex, WebRequest request){
+		String error = "Falha ao pegar valores das moedas";
+
+		ApiErrorDTO apiError = new ApiErrorDTO(error, ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 
 		return new ResponseEntity<ApiErrorDTO>(apiError, new HttpHeaders(), apiError.getStatus());
 	}
